@@ -1,20 +1,45 @@
 package es.uned.services.rest;
 
 
-import javax.websocket.server.PathParam;
+import java.util.List;
+
+import javax.validation.Valid;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import es.uned.model.Message;
+import es.uned.services.data.interfaces.MessageService;
  
 @Component
-@Path("/rest")
+@Path("/messages")
+@Produces(MediaType.APPLICATION_JSON)
 public class RestAPI {
+	
+	@Autowired
+	MessageService messageService;
+
+	
 	@GET
-	@Produces("application/xml")
-	public String sayHelloXML() {
-		return "<messages><message>Hello world</message></messages>";
+	public List<Message> getAllMessage() {
+		return messageService.getAllMessages();
 	}
+
+	@GET
+	@Path("{id}")
+	public Message getMessage( @PathParam("id") Long id ) {
+		return messageService.getMessageById(id);
+	}
+	
+	@POST
+	public void save(@Valid Message message) {
+        messageService.save(message);
+    }
  
 }

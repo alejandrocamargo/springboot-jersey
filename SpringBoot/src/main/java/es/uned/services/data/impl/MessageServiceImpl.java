@@ -19,29 +19,26 @@ import es.uned.services.data.interfaces.MessageService;
 public class MessageServiceImpl implements MessageService {
 	
 	private HashMap<Long, Message> hashMessages= new HashMap<Long, Message>();
+	private long idMensaje = 0;
 	
 	@PostConstruct
 	private void init() {
 		Message m1 = new Message();
-		m1.setId(new Long(1));
 		m1.setAutor("Pepe Pepon");
-		m1.setTitulo("Mensaje uno");
+		m1.setTitulo("Mensaje cero");
 		m1.setTexto("Este es un primer mensaje de prueba");
 		m1.setFecha(new Date());
 		
-		hashMessages.put(new Long(1), m1);
+		this.saveMessage(m1);
 		
 		Message m2 = new Message();
-		m2.setId(new Long(2));
 		m2.setAutor("Federico perez");
 		m2.setTitulo("Mensaje uno");
 		m2.setTexto("Este es un segundo mensaje de prueba");
 		m2.setFecha(new Date());
 		
-		hashMessages.put(new Long(2), m2);
-		
+		this.saveMessage(m2);
 	}
-	
 	
 	public List<Message> getAllMessages() {
 		List<Message> messagesList = new ArrayList<Message>();
@@ -58,7 +55,30 @@ public class MessageServiceImpl implements MessageService {
 		return hashMessages.get(id);
 	}
 	
-	public void save(Message message) {
-		hashMessages.put(message.getId(), message);
+	public Long saveMessage(Message message) {
+		message.setId(idMensaje);
+		hashMessages.put(idMensaje, message);
+		idMensaje++;
+		return message.getId();
+	}
+	
+	public boolean deleteMessage(long id) {
+		if (hashMessages.get(id) != null) {
+			hashMessages.remove(id);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean updateMessage(Long id, Message message) {
+		if (hashMessages.get(id) != null) {
+			hashMessages.remove(id);
+			message.setId(id);
+			hashMessages.put(id, message);
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

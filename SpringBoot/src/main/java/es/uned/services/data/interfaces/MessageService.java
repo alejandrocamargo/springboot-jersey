@@ -7,5 +7,7 @@ import es.uned.model.Message;
 public interface MessageService {
 	public List<Message> getAllMessages();
 	public Message getMessageById(Long id);
-	public void save(Message message);
+	public Long saveMessage(Message message);
+	public boolean deleteMessage(long id);
+	public boolean updateMessage(Long id, Message message);
 }
